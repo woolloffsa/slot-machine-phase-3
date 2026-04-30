@@ -30,6 +30,7 @@ def generate_reels(bank, wildcard, count):
 
 def is_win(reels, wildcard, target_count):
     """Checks for a win"""
+    win = 0
     match_count = 0
     # Lists of winning patterns
     diagonal_line = [reels[0][0], reels[1][1], reels[2][2]]
@@ -37,15 +38,13 @@ def is_win(reels, wildcard, target_count):
     # Checks for a win
     if diagonal_line.count(diagonal_line[0]) + diagonal_line.count(WILDCARD_SYMBOL) == REEL_COUNT:
         print("Diagonal Win!!")
-        win = 10
+        win += 10
        
-    elif straight_line.count(straight_line[0]) + straight_line.count(WILDCARD_SYMBOL) == REEL_COUNT:
+    if straight_line.count(straight_line[0]) + straight_line.count(WILDCARD_SYMBOL) == REEL_COUNT:
         print("Straight Line Win!!")
-        win = 5
-           
+        win += 5     
     else:
         print("No win")
-        win = 0
 
     return win
 
@@ -65,7 +64,6 @@ if __name__ == "__main__":
     while spin == "y":
         reels = generate_reels(SYMBOL_BANK, WILDCARD_SYMBOL, REEL_COUNT)
         display_reels(reels)
-        is_win(reels, WILDCARD_SYMBOL, REEL_COUNT)
         current_win = is_win(reels, WILDCARD_SYMBOL, REEL_COUNT)
         BALANCE -= SPIN_COST
         BALANCE += current_win
