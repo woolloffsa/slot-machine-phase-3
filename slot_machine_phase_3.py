@@ -52,7 +52,6 @@ def is_win(reels, wildcard, target_count, cost):
     if has_won == False:
         print("no win")
         player_profile["lifetime_losses"] += cost
-        print(player_profile["lifetime_losses"])
 
     return win
 
@@ -88,9 +87,13 @@ if __name__ == "__main__":
         reels = generate_reels(SYMBOL_BANK, WILDCARD_SYMBOL, REEL_COUNT)
         display_reels(reels)
         current_win = is_win(reels, WILDCARD_SYMBOL, REEL_COUNT, SPIN_COST)
+        if current_win > player_profile["high_score"]:
+            player_profile["high_score"] = current_win
+            print("New high score!! \nHigh score: {}".format(player_profile["high_score"]))
         BALANCE -= SPIN_COST
         BALANCE += current_win
         print("Your current balance is ${}".format(BALANCE))
+        check_marketing_status(player_profile)
         spin = input("spin?(y/n) ")
        
     print("Thanks for playing!")
