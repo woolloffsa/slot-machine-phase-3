@@ -31,8 +31,9 @@ def generate_reels(bank, wildcard, count):
     return reels
 
 
-def is_win(reels, wildcard, target_count):
+def is_win(reels, wildcard, target_count, cost):
     """Checks for a win"""
+    has_won = False
     win = 0
     match_count = 0
     # Lists of winning patterns
@@ -42,12 +43,16 @@ def is_win(reels, wildcard, target_count):
     if diagonal_line.count(diagonal_line[0]) + diagonal_line.count(WILDCARD_SYMBOL) == REEL_COUNT:
         print("Diagonal Win!!")
         win += 10
+        has_won = True
        
     if straight_line.count(straight_line[0]) + straight_line.count(WILDCARD_SYMBOL) == REEL_COUNT:
         print("Straight Line Win!!")
-        win += 5     
-    else:
-        print("No straight line win")
+        win += 5
+        has_won = True
+    if has_won == False:
+        print("no win")
+        player_profile["lifetime_losses"] += cost
+        print(player_profile["lifetime_losses"])
 
     return win
 
@@ -71,7 +76,6 @@ def check_marketing_status(player_profile):
 # main routine
 if __name__ == "__main__":
 
-    # Add try except
     print("Welcome to the slot machines")
     user_response = input("Please enter your name for your profile: ")
     player_profile["name"] = user_response
@@ -83,7 +87,7 @@ if __name__ == "__main__":
     while spin == "y":
         reels = generate_reels(SYMBOL_BANK, WILDCARD_SYMBOL, REEL_COUNT)
         display_reels(reels)
-        current_win = is_win(reels, WILDCARD_SYMBOL, REEL_COUNT)
+        current_win = is_win(reels, WILDCARD_SYMBOL, REEL_COUNT, SPIN_COST)
         BALANCE -= SPIN_COST
         BALANCE += current_win
         print("Your current balance is ${}".format(BALANCE))
