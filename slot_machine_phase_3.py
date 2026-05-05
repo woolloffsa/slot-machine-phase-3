@@ -10,6 +10,9 @@ REEL_COUNT = 3
 SPIN_COST = 1
 BALANCE = 10
 
+player_profile = {"name":"name", "location":"location",
+                  "high_score":0, "lifetime_losses":0}
+
 # function definitions
 
 def generate_reels(bank, wildcard, count):
@@ -44,7 +47,7 @@ def is_win(reels, wildcard, target_count):
         print("Straight Line Win!!")
         win += 5     
     else:
-        print("No win")
+        print("No straight line win")
 
     return win
 
@@ -55,10 +58,26 @@ def display_reels(reels):
         print(reels[0][row], reels[1][row], reels[2][row])
 
 
+def check_marketing_status(player_profile):
+    # Checks if players lifetime losses are above 500
+    if player_profile["lifetime_losses"] >= 500:
+        # Prints VIP message and updates to targetted ads
+        print("Double your next deposit! Buy more credits now!")
+        player_profile["target_ads"] = True
+    else:
+        print("Keep playing to climb the leaderboard!")
+
+
 # main routine
 if __name__ == "__main__":
 
     # Add try except
+    print("Welcome to the slot machines")
+    user_response = input("Please enter your name for your profile: ")
+    player_profile["name"] = user_response
+    user_response = input("Please enter your location: ")
+    player_profile["location"] = user_response
+    
     spin = input("spin?(y/n) ")
 
     while spin == "y":
