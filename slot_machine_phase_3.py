@@ -109,6 +109,14 @@ if __name__ == "__main__":
         # Prints balance
         print("Your current balance is ${}".format(BALANCE))
         check_marketing_status(player_profile)
+
+        # Asks the user to play again
         spin = input("spin?(y/n) ")
+        bet = int(input("How much would you like to bet? ($0-$100)"))
+
+        # Check if in debt
+        if BALANCE <= 0:
+            print("You cannot bet anymore you are in debt. ")
+            break
 
     print("Thanks for playing!")
