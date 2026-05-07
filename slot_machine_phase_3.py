@@ -91,7 +91,14 @@ if __name__ == "__main__":
     player_profile["location"] = user_response
 
     spin = input("spin?(y/n) ")
-    bet = int(input("How much would you like to bet? ($0-$100)"))
+    valid_input = False
+    while valid_input is False:
+        bet_input = input("How much would you like to bet? ($0-$100)")
+        try:
+            bet = int(bet_input)
+            valid_input = True
+        except ValueError:
+            print("Please enter a valid bet")
 
     while spin == "y":
         reels = generate_reels(SYMBOL_BANK, WILDCARD_SYMBOL, REEL_COUNT)
@@ -112,7 +119,14 @@ if __name__ == "__main__":
 
         # Asks the user to play again
         spin = input("spin?(y/n) ")
-        bet = int(input("How much would you like to bet? ($0-$100)"))
+        valid_input = False
+        while valid_input is False:
+            bet_input = input("How much would you like to bet? ($0-$100)")
+            try:
+                bet = int(bet_input)
+                valid_input = True
+            except ValueError:
+                print("Please enter a valid bet")
 
         # Check if in debt
         if BALANCE <= 0:
