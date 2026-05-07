@@ -10,46 +10,51 @@ REEL_COUNT = 3
 SPIN_COST = 1
 BALANCE = 10
 
-player_profile = {"name":"name", "location":"location",
-                  "high_score":0, "lifetime_losses":0}
+player_profile = {
+    "name": "name", 
+    "location": "location",
+    "high_score": 0, 
+    "lifetime_losses": 0
+}
 
-# function definitions
 
+# Function definitions
 def generate_reels(bank, wildcard, count):
-    """Generates the reels"""
+    """Generates the reels."""
     reels = []
     current_reel = []
-   
-    for reel in range(REEL_COUNT):   # Resets after filling a reel
+
+    for reel in range(REEL_COUNT):  # Resets after filling a reel
         current_reel = []
         # Puts symbols in reels
         for symbol in range(3):
             random_symbol = random.choice(SYMBOL_BANK + [WILDCARD_SYMBOL])
             current_reel.append(random_symbol)
         reels.append(current_reel)
-       
+
     return reels
 
 
 def is_win(reels, wildcard, target_count, cost):
-    """Checks for a win"""
+    """Checks for win."""
     has_won = False
     win = 0
-    match_count = 0
     # Lists of winning patterns
     diagonal_line = [reels[0][0], reels[1][1], reels[2][2]]
     straight_line = [reels[0][1], reels[1][1], reels[2][1]]
+    
     # Checks for a win
     if diagonal_line.count(diagonal_line[0]) + diagonal_line.count(WILDCARD_SYMBOL) == REEL_COUNT:
         print("Diagonal Win!!")
         win += 10
         has_won = True
-       
+
     if straight_line.count(straight_line[0]) + straight_line.count(WILDCARD_SYMBOL) == REEL_COUNT:
         print("Straight Line Win!!")
         win += 5
         has_won = True
-    if has_won == False:
+        
+    if not has_won:
         print("no win")
         player_profile["lifetime_losses"] += cost
 
@@ -57,15 +62,14 @@ def is_win(reels, wildcard, target_count, cost):
 
 
 def display_reels(reels):
-    """Prints reels in a formatted way"""
+    """Prints reels in a formatted way."""
     for row in range(3):
         print(reels[0][row], reels[1][row], reels[2][row])
 
 
 def check_marketing_status(player_profile):
-    # Checks if players lifetime losses are above 500
+    """Checks lifetime losses and displays appropriate message."""
     if player_profile["lifetime_losses"] >= 500:
-        # Prints VIP message and updates to targetted ads
         print("Double your next deposit! Buy more credits now!")
         player_profile["target_ads"] = True
     else:
@@ -74,26 +78,31 @@ def check_marketing_status(player_profile):
 
 # main routine
 if __name__ == "__main__":
-
+    # Ask user for profile input
     print("Welcome to the slot machines")
     user_response = input("Please enter your name for your profile: ")
     player_profile["name"] = user_response
     user_response = input("Please enter your location: ")
     player_profile["location"] = user_response
-    
+
     spin = input("spin?(y/n) ")
 
     while spin == "y":
         reels = generate_reels(SYMBOL_BANK, WILDCARD_SYMBOL, REEL_COUNT)
         display_reels(reels)
         current_win = is_win(reels, WILDCARD_SYMBOL, REEL_COUNT, SPIN_COST)
+
+        # Updates highscore
         if current_win > player_profile["high_score"]:
             player_profile["high_score"] = current_win
             print("New high score!! \nHigh score: {}".format(player_profile["high_score"]))
+        
         BALANCE -= SPIN_COST
         BALANCE += current_win
+
+        # Prints balance
         print("Your current balance is ${}".format(BALANCE))
         check_marketing_status(player_profile)
         spin = input("spin?(y/n) ")
-       
+
     print("Thanks for playing!")
